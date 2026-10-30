@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=b5792db0-e692-4986-95df-514507d55902
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=5abaf841-75bb-48a7-97f9-7fe484b1df43
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis XV Años - Yureli</title>
+  <!-- NUEVAS FUENTES ELEGANTES DE GOOGLE FONTS -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Parisienne&family=Plus+Jakarta+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    /* --- ANIMACIÓN DE PARPADEO / BRILLO PARA EL NOMBRE --- */
+    @keyframes nameGlow {
+      0%, 100% {
+        opacity: 1;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1), 0 0 15px rgba(253, 224, 71, 0.5), 0 0 30px rgba(212, 175, 55, 0.4);
+      }
+      50% {
+        opacity: 0.45;
+        text-shadow: 0 0 5px rgba(253, 224, 71, 0.2);
+      }
+    }
+
+    h1.name {
+      font-family: 'Parisienne', cursive;
+      font-size: 5.2rem;
+      color: var(--gold-main);
+      margin-bottom: 10px;
+      line-height: 1.1;
+      animation: nameGlow 2.5s ease-in-out infinite;
+      will-change: opacity, text-shadow;
+    }
+
+    /* --- VARIABLES DE COLOR Y ESTILOS BASE --- */
+    :root {
+      --bg-light: #f0f7ff;
+      --bg-card: rgba(255, 255, 255, 0.92);
+      --primary-blue: #7dd3fc;
+      --accent-blue: #0284c7;
+      --soft-blue: #e0f2fe;
+      --gold-main: #d4af37;
+      --gold-light: #fef08a;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #fefce8 100%);
+      color: var(--text-dark);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      text-align: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    /* --- ANIMACIÓN DE EXPANSIÓN DESDE EL CENTRO --- */
+    @keyframes expandFromCenter {
+      0% {
+        opacity: 0;
+        transform: scale(0.2);
+      }
+      80% {
+        transform: scale(1.03);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* --- ANIMACIÓN DE DESTELLO / BRILLO CRUZADO --- */
+    @keyframes shineEffect {
+      0% {
+        left: -100%;
+      }
+      30%, 100% {
+        left: 200%;
+      }
+    }
+
+    /* --- ESTILO DE LA FOTO DE PORTADA CON BRILLO Y EXPANSIÓN --- */
+    .cover-photo-container {
+      position: relative;
+      width: 100%;
+      max-width: 320px;
+      margin: 0 auto 20px auto;
+      border: 3px solid var(--gold-main);
+      border-radius: 20px;
+      padding: 6px;
+      background: #ffffff;
+      box-shadow: 0 10px 25px rgba(212, 175, 55, 0.25);
+      overflow: hidden;
+      opacity: 0;
+    }
+
+    .envelope-wrapper.open .cover-photo-container {
+      animation: expandFromCenter 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards 0.6s;
+    }
+
+    .cover-photo {
+      width: 100%;
+      height: 380px;
+      object-fit: cover;
+      border-radius: 14px;
+      display: block;
+    }
+
+    .cover-photo-container::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(
+        90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.6) 50%, 
+        transparent 100%
+      );
+      transform: skewX(-25deg);
+      pointer-events: none;
+    }
+
+    .envelope-wrapper.open .cover-photo-container::after {
+      animation: shineEffect 4s ease-in-out infinite 1.8s;
+    }
+
+    /* --- DESTELLOS, LUNAS Y ESTRELLAS --- */
+    .sky-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .moon {
+      position: absolute;
+      font-size: 3.5rem;
+      color: var(--primary-blue);
+      filter: drop-shadow(0 0 15px rgba(125, 211, 252, 0.8));
+      animation: floatMoon 8s ease-in-out infinite alternate;
+    }
+
+    .star {
+      position: absolute;
+      color: #38bdf8;
+      filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.6));
+      animation: pulseStar linear infinite alternate;
+    }
+
+    @keyframes floatMoon {
+      0% { transform: translateY(0) rotate(-5deg); }
+      100% { transform: translateY(-25px) rotate(10deg); }
+    }
+
+    @keyframes pulseStar {
+      0% { opacity: 0.3; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1.4); }
+    }
+
+    /* --- SOBRE ELEGANTE --- */
+    .envelope-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 550px;
+      margin: auto;
+      z-index: 10;
+      perspective: 1000px;
+    }
+
+    .envelope {
+      position: relative;
+      width: 100%;
+      height: 380px;
+      background: #f8fafc;
+      border: 2px solid var(--gold-main);
+      border-radius: 12px;
+      box-shadow: 0 15px 35px rgba(212, 175, 55, 0.25), 0 5px 15px rgba(0,0,0,0.08);
+      cursor: pointer;
+      transition: transform 0.6s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 50%;
+      background: linear-gradient(180deg, #e0f2fe 0%, #bae6fd 100%);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      border-bottom: 2px solid var(--gold-main);
+      transform-origin: top;
+      transition: transform 0.8s ease-in-out;
+      z-index: 3;
+    }
+
+    .seal {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(circle, #fef08a 0%, var(--gold-main) 100%);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Parisienne', cursive;
+      font-size: 2.5rem;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2), 0 0 15px rgba(212, 175, 55, 0.5);
+      border: 2px solid #ffffff;
+      z-index: 4;
+      transition: opacity 0.4s ease;
+    }
+
+    .click-hint {
+      position: absolute;
+      bottom: 20px;
+      font-size: 0.9rem;
+      color: var(--accent-blue);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 600;
+      z-index: 2;
+    }
+
+    .envelope-wrapper.open .envelope-flap {
+      transform: rotateX(180deg);
+      z-index: 1;
+    }
+
+    .envelope-wrapper.open .seal {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .envelope-wrapper.open .card-container {
+      display: block;
+      animation: slideUp 1s ease forwards 0.5s;
+    }
+
+    .envelope-wrapper.open .envelope {
+      height: auto;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      cursor: default;
+    }
+
+    /* --- TARJETA PRINCIPAL --- */
+    .card-container {
+      display: none;
+      background: var(--bg-card);
+      border: 2px solid var(--gold-main);
+      border-radius: 20px;
+      padding: 40px 25px;
+      box-shadow: 0 10px 40px rgba(56, 189, 248, 0.2);
+      backdrop-filter: blur(10px);
+      position: relative;
+      z-index: 5;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-section {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+      will-change: opacity, transform;
+    }
+
+    .fade-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      letter-spacing: 4px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-blue);
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .phrase {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      color: var(--text-muted);
+      font-size: 1.15rem;
+      max-width: 420px;
+      margin: 15px auto 10px;
+      line-height: 1.6;
+    }
+
+    .thank-you-msg {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-style: italic;
+      color: var(--accent-blue);
+      font-size: 1.15rem;
+      max-width: 420px;
+      margin: 0 auto 20px;
+      line-height: 1.5;
+    }
+
+    .princess-container {
+      margin: 15px auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .parents-godparents-section {
+      margin: 25px 0;
+      padding: 20px 10px;
+      border-top: 1px dashed var(--primary-blue);
+      border-bottom: 1px dashed var(--primary-blue);
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 12px;
+    }
+
+    .group-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      color: var(--accent-blue);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 15px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .group-title:first-child {
+      margin-top: 0;
+    }
+
+    .elegant-names {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--gold-main);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      line-height: 1.5;
+      margin-bottom: 15px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .countdown-section {
+      background: linear-gradient(135deg, var(--soft-blue) 0%, #ffffff 100%);
+      border: 1px solid var(--primary-blue);
+      border-radius: 15px;
+      padding: 20px 10px;
+      margin: 25px 0;
+    }
+
+    .countdown-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--accent-blue);
+      margin-bottom: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .timer-grid {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .time-box {
+      background: #ffffff;
+      border: 1px solid var(--gold-main);
+      border-radius: 10px;
+      padding: 10px;
+      min-width: 65px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    .time-box span {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent-blue);
+    }
+
+    .time-box label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .info-card {
+      border-top: 1px dashed var(--primary-blue);
+      padding-top: 20px;
+      margin-top: 20px;
+    }
+
+    h2 {
+      font-family: 'Cormorant Garamond', serif;
+      color: var(--gold-main);
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 15px;
+    }
+
+    .event-details {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      margin-bottom: 20px;
+    }
+
+    .event-item h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--accent-blue);
+      margin-bottom: 5px;
+    }
+
+    .event-icon {
+      margin: 10px auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* --- MESAS DE REGALOS CENTRADAS Y LLUVIA DE SOBRES --- */
+    .gifts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+      justify-content: center;
+    }
+
+    .gift-card {
+      background: #ffffff;
+      border: 1px solid var(--primary-blue);
+      border-radius: 12px;
+      padding: 15px 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
+    }
+
+    /* Estilo para que la Lluvia de Sobres quede centrada y abarque el ancho */
+    .gift-card.centered-card {
+      grid-column: 1 / -1;
+      max-width: 320px;
+      margin: 0 auto;
+      width: 100%;
+      background: linear-gradient(135deg, #ffffff 0%, var(--soft-blue) 100%);
+      border: 1px solid var(--gold-main);
+    }
+
+    .gift-card p {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .btn-sm {
+      padding: 6px 14px;
+      font-size: 0.75rem;
+      margin-top: 8px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 10px 22px;
+      background: linear-gradient(135deg, var(--gold-main) 0%, #b8860b 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 25px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem;
+      letter-spacing: 1px;
+      text-decoration: none;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6);
+    }
+
+    .music-control {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #ffffff;
+      border: 2px solid var(--gold-main);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      z-index: 100;
+      font-size: 1.3rem;
+    }
+
+    footer {
+      margin-top: 30px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fondo de lunas y estrellas -->
+  <div class="sky-container" id="skyContainer"></div>
+
+  <!-- Contenedor del Sobre / Invitación -->
+  <div class="envelope-wrapper" id="envelopeWrapper">
+    
+    <!-- SOBRE CERRADO -->
+    <div class="envelope" onclick="openEnvelope()">
+      <div class="envelope-flap"></div>
+      <div class="seal">Y</div>
+      <p class="click-hint">✨ Toca para abrir ✨</p>
+
+      <!-- TARJETA INTERNA -->
+      <div class="card-container">
+        
+        <!-- SECCIÓN 1: Encabezado con Foto de Portada -->
+        <div class="fade-section">
+          
+          <!-- FOTO DE PORTADA DE YURELI -->
+          <div class="cover-photo-container">
+            <img src="portada.jpg" alt="Foto de Yureli" class="cover-photo">
+          </div>
+
+          <p class="subtitle">Mis XV Años</p>
+          <br>
+          <p class="phrase">
+            "Lo que para mí ayer fue un sueño, hoy se me hace realidad, gracias a la Bendición de Dios."
+          </p>
+          <br>
+          <h1 class="name">Yureli</h1>
+
+          <br>
+          <p class="phrase">
+            "Bajo la luna en un cielo ilimitado de estrellas, celebro la magia de mis quince años al lado de las personas que más quiero."
+          </p>
+
+          <!-- ILUSTRACIÓN DE LUNA Y ESTRELLA -->
+          <div class="princess-container">
+            <svg width="180" height="180" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fef08a" />
+                  <stop offset="50%" stop-color="#d4af37" />
+                  <stop offset="100%" stop-color="#b8860b" />
+                </linearGradient>
+
+                <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#bae6fd" />
+                  <stop offset="50%" stop-color="#38bdf8" />
+                  <stop offset="100%" stop-color="#0284c7" />
+                </linearGradient>
+
+                <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="4" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+              </defs>
+
+              <path d="M 120 20 A 75 75 0 1 0 170 145 A 60 60 0 1 1 120 20 Z" 
+                    fill="url(#goldGrad)" 
+                    stroke="url(#blueGrad)" 
+                    stroke-width="2" 
+                    filter="url(#glow)" />
+
+              <path d="M 130 45 Q 130 75 160 75 Q 130 75 130 105 Q 130 75 100 75 Q 130 75 130 45 Z" 
+                    fill="url(#blueGrad)" 
+                    stroke="url(#goldGrad)" 
+                    stroke-width="1.5" 
+                    filter="url(#glow)" />
+
+              <circle cx="75" cy="50" r="3" fill="#fef08a" />
+              <circle cx="165" cy="120" r="2.5" fill="#38bdf8" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- SECCIÓN 2: Padres y Padrinos -->
+        <div class="parents-godparents-section fade-section">
+          <p class="group-title">Mis Padres:</p>
+          <div class="elegant-names">
+            Yuri Castillo<br>Y<br> Epick Vargas<br>
+          </div>
+
+          <p class="group-title">Mis Padrinos:</p>
+          <div class="elegant-names" style="margin-bottom: 0;">
+            Mireya Zambrano<br>Y<br>Humberto Campos<br>
+          </div>
+        </div>
+
+        <!-- SECCIÓN 7: Contador Regresivo -->
+        <div class="countdown-section fade-section">
+          <p class="countdown-title">Faltan tan solo</p>
+          <div class="timer-grid">
+            <div class="time-box"><span id="days">00</span><label>Días</label></div>
+            <div class="time-box"><span id="hours">00</span><label>Horas</label></div>
+            <div class="time-box"><span id="minutes">00</span><label>Min</label></div>
+            <div class="time-box"><span id="seconds">00</span><label>Seg</label></div>
+          </div>
+        </div>
+
+        <!-- SECCIÓN 3: Fecha y Hora -->
+        <div class="info-card fade-section">
+          <h2>¿Cuándo y Dónde?</h2>
+          <p style="font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 1.3rem; color: var(--accent-blue);">Sábado, 7 de Noviembre de 2026</p>
+          <br>
+          <div class="event-details">
+            <div class="event-item">
+              <h3>Ceremonia Religiosa</h3>
+              <div class="event-icon">
+                <svg width="100" height="90" viewBox="0 0 100 90" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="48" y="5" width="4" height="15" fill="url(#goldGrad)" />
+                  <rect x="42" y="9" width="16" height="4" fill="url(#goldGrad)" />
+                  <polygon points="50,20 15,45 85,45" fill="url(#blueGrad)" stroke="url(#goldGrad)" stroke-width="1.5" />
+                  <rect x="22" y="45" width="56" height="40" fill="#ffffff" stroke="url(#blueGrad)" stroke-width="1.5" />
+                  <circle cx="50" cy="35" r="5" fill="#fef08a" stroke="url(#goldGrad)" stroke-width="1" />
+                  <path d="M 40 85 L 40 62 Q 50 52 60 62 L 60 85 Z" fill="url(#goldGrad)" stroke="url(#blueGrad)" stroke-width="1" />
+                  <path d="M 28 70 L 28 55 Q 32 50 36 55 L 36 70 Z" fill="url(#blueGrad)" opacity="0.6" />
+                  <path d="M 64 70 L 64 55 Q 68 50 72 55 L 72 70 Z" fill="url(#blueGrad)" opacity="0.6" />
+                  <path d="M 12 25 Q 12 30 17 30 Q 12 30 12 35 Q 12 30 7 30 Q 12 30 12 25 Z" fill="url(#goldGrad)"/>
+                  <path d="M 88 25 Q 88 30 93 30 Q 88 30 88 35 Q 88 30 83 30 Q 88 30 88 25 Z" fill="url(#goldGrad)"/>
+                </svg>
+              </div>
+              <p>Parroquia de "María Auxiliadora"</p>
+              <p style="color: var(--text-muted); font-size: 0.85rem;">16:45 hrs</p>
+              <a href="https://maps.app.goo.gl/6idiDH1knC98GTNM6" target="_blank" class="btn">Ver Ubicación</a>
+            </div>
+            
+            <div class="event-item">
+              <h3>Recepción</h3>
+              <div class="event-icon">
+                <svg width="100" height="90" viewBox="0 0 100 90" xmlns="http://www.w3.org/2000/svg">
+                  <g transform="translate(-5, 0)">
+                    <path d="M 33 28 Q 42 42 42 55 A 12 12 0 0 1 18 55 Q 18 42 27 28 Z" fill="url(#blueGrad)" opacity="0.8" />
+                    <path d="M 30 20 L 45 50 Q 45 62 30 62 Q 15 62 15 50 Z" fill="none" stroke="url(#goldGrad)" stroke-width="1.8" />
+                    <line x1="30" y1="62" x2="30" y2="82" stroke="url(#goldGrad)" stroke-width="2" />
+                    <ellipse cx="30" cy="82" rx="12" ry="3" fill="url(#goldGrad)" />
+                  </g>
+                  <g transform="translate(45, 10) rotate(-18 30 50)">
+                    <path d="M 33 28 Q 42 42 42 55 A 12 12 0 0 1 18 55 Q 18 42 27 28 Z" fill="url(#blueGrad)" opacity="0.8" />
+                    <path d="M 30 20 L 45 50 Q 45 62 30 62 Q 15 62 15 50 Z" fill="none" stroke="url(#goldGrad)" stroke-width="1.8" />
+                    <line x1="30" y1="62" x2="30" y2="82" stroke="url(#goldGrad)" stroke-width="2" />
+                    <ellipse cx="30" cy="82" rx="12" ry="3" fill="url(#goldGrad)" />
+                  </g>
+                  <circle cx="48" cy="22" r="2" fill="#fef08a" />
+                  <circle cx="53" cy="15" r="3" fill="#38bdf8" />
+                  <circle cx="42" cy="12" r="1.5" fill="#fef08a" />
+                  <path d="M 48 5 Q 48 10 53 10 Q 48 10 48 15 Q 48 10 43 10 Q 48 10 48 5 Z" fill="url(#goldGrad)"/>
+                </svg>
+              </div>
+              <p>Casita</p>
+              <p style="color: var(--text-muted); font-size: 0.85rem;">18:00 hrs</p>
+              <a href="https://www.google.com/maps/search/?api=1&query=19.2866109%2C-99.1323175" target="_blank" class="btn">Ver Ubicación</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECCIÓN 4: Mesas de Regalos -->
+        <div class="info-card fade-section">
+          <h2>Mesa de Regalos</h2>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">Tu presencia es mi mejor regalo, pero si deseas tener un detalle conmigo:</p>
+          
+          <div class="gifts-grid">
+            <div class="gift-card">
+              <p>🎁 Liverpool</p>
+              <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Evento: 52032960</p>
+              <a href="https://mesaderegalos.liverpool.com.mx/milistaderegalos/52032960" target="_blank" class="btn btn-sm">Ver Mesa</a>
+            </div>
+            <div class="gift-card">
+              <p>📦 Sears</p>
+              <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Evento: 285740
+              <a href="https://www.sears.com.mx/Mesa-de-Regalos/285740/mis-xv-anos-yureli" target="_blank" class="btn btn-sm">Ver Mesa</a>
+            </div>
+            <div class="gift-card centered-card">
+              <p>✉️ Lluvia de Sobres</p>
+              <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 6px; line-height: 1.4;">
+                Si deseas hacerme un presente en efectivo, colocaremos un buzón especial el día del evento.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECCIÓN 8: Mensaje Final -->
+        <div class="fade-section">
+          <p class="thank-you-msg">
+           <br> ✨ Gracias por querer ser parte de este momento que será inolvidable para mí. ✨
+          </p>
+
+          <footer>
+            <p>🌙 Yureli 2026 ✨</p>
+            <p>🌙 En Memoria de Mima "Siempre te llevaré en mi corazón" 🌙</p>
+          </footer>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="music-control" id="musicBtn" onclick="toggleMusic()">🎵</div>
+
+  <audio id="bgMusic" loop>
+    <source src="perfect.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    function openEnvelope() {
+      const wrapper = document.getElementById('envelopeWrapper');
+      if (!wrapper.classList.contains('open')) {
+        wrapper.classList.add('open');
+        playMusic();
+        setTimeout(initScrollObserver, 500);
+      }
+    }
+
+    function initScrollObserver() {
+      const fadeSections = document.querySelectorAll('.fade-section');
+      const observerOptions = {
+        root: null,
+        rootMargin: '0px 0px -50px 0px',
+        threshold: 0.15
+      };
+
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+
+      fadeSections.forEach(section => {
+        observer.observe(section);
+      });
+    }
+
+    const sky = document.getElementById('skyContainer');
+
+    for (let i = 0; i < 4; i++) {
+      const moon = document.createElement('div');
+      moon.className = 'moon';
+      moon.innerHTML = '🌙';
+      moon.style.left = `${10 + i * 25}%`;
+      moon.style.top = `${10 + (i % 2) * 40}%`;
+      moon.style.animationDelay = `${i * 1.5}s`;
+      sky.appendChild(moon);
+    }
+
+    for (let i = 0; i < 35; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.innerHTML = i % 3 === 0 ? '✨' : '★';
+      star.style.fontSize = `${Math.random() * 1.5 + 1}rem`;
+      star.style.left = `${Math.random() * 100}%`;
+      star.style.top = `${Math.random() * 100}%`;
+      star.style.animationDuration = `${Math.random() * 2 + 1.5}s`;
+      star.style.animationDelay = `${Math.random() * 2}s`;
+      sky.appendChild(star);
+    }
+
+    const targetDate = new Date('November 7, 2026 16:45:00').getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const difference = targetDate - now;
+
+      if (difference > 0) {
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+        document.getElementById('days').innerText = days < 10 ? '0' + days : days;
+        document.getElementById('hours').innerText = hours < 10 ? '0' + hours : hours;
+        document.getElementById('minutes').innerText = minutes < 10 ? '0' + minutes : minutes;
+        document.getElementById('seconds').innerText = seconds < 10 ? '0' + seconds : seconds;
+      }
+    }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    const audio = document.getElementById('bgMusic');
+    const musicBtn = document.getElementById('musicBtn');
+    let isPlaying = false;
+
+    function playMusic() {
+      audio.play().then(() => {
+        isPlaying = true;
+        musicBtn.innerText = '🔊';
+      }).catch(err => {
+        console.log("Autoplay bloqueado por el navegador");
+      });
+    }
+
+    function toggleMusic() {
+      if (isPlaying) {
+        audio.pause();
+        musicBtn.innerText = '🔇';
+        isPlaying = false;
+      } else {
+        audio.play();
+        musicBtn.innerText = '🔊';
+        isPlaying = true;
+      }
+    }
+  </script>
+</body>
+</html>
